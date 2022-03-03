@@ -77,22 +77,20 @@ class axiosStub {
   // ...logic
 }
 
-/***********/
-/* HELPERS */
-/***********/
+/************/
+/* WRAPPERS */
+/************/
 
 // The goal of this section is to extract the tested component
 // creation logic, so it has a clear interface and does not 
 // "pollute" the tests bodies.
-//
-// Note: Thus, perhaps, this section should be called CREATORS?
 
 async function createFoo() {
   return await mount('Foo')
 }
 
 async function createEmptyFoo() {
-  return await mount('Foo', {propsData: {isEmpty: true}})
+  return await mount('Foo', { propsData: { isEmpty: true }})
 }
 
 /*********/

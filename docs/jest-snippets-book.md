@@ -3,14 +3,14 @@
 ## Registering 3rd party components, plugins, mixins, directives, etc.
 
 ```js
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 
 // https://v1.test-utils.vuejs.org/api/createlocalvue.html#createlocalvue
 const localVue = createLocalVue()
 localVue.use('*3RD PARTY MODULE*')
 s
 test('test', async () => {
-  const wrapper = await mount(Foo, {localVue})
+  const wrapper = await mount(Foo, { localVue })
 })
 ```
 
@@ -24,21 +24,21 @@ const localVue = createLocalVue()
 localVue.use(Vuetify)
 ```
 
-### Special case: Error in v-on handler: "TypeError: Cannot read properties
-
-    of undefined (reading '_transitionClasses')”
+### Special case: Error in v-on handler: "TypeError: Cannot read properties of undefined (reading '_transitionClasses')”
 
 ```js
 const wrapper = await mount('Foo', { sync: false })
 ```
 
-Note: This might be not necessary after updating `vue-test-utils`?
+!!! note
+     
+    Is this stil necessary after using the latest `vue-test-utils`?
 
 ## Injecting props and data to tested component
 
 ```js
 async function createComponentFoo() {
-  const wrapper = await mount(
+  return await mount(
     Foo,
     {
       propsData: {
@@ -49,8 +49,6 @@ async function createComponentFoo() {
       }),
     },
   )
-
-  return {wrapper, routerPushMock}
 }
 ```
 
@@ -72,7 +70,7 @@ async function createComponentFoo() {
     },
   )
 
-  return {wrapper, setBarMock}
+  return wrapper
 }
 ```
 
@@ -149,17 +147,17 @@ for (let i = 0; i < 3; i++) {
 ```js
 async function createComponentFoo() {
   const routerPushMock = jest.fn()
-  const testRouter = {push: routerPushMock}
+  const testRouter = { push: routerPushMock }
 
   const wrapper = await mount(
     Foo,
     {
       localVue,
-      mocks: {$router: testRouter},
+      mocks: { $router: testRouter },
     },
   )
 
-  return {wrapper, routerPushMock}
+  return { wrapper, routerPushMock }
 }
 ```
 
@@ -181,11 +179,11 @@ async function createComponentFoo() {
     Foo,
     {
       localVue,
-      mocks: {$router: testRouter},
+      mocks: { $router: testRouter },
     },
   )
 
-  return {wrapper, setBarMock}
+  return { wrapper, setBarMock }
 }
 ```
 
@@ -269,7 +267,7 @@ const targetEvent = targetEvents.length ? targetEvents[0] : null
 expect(!!event).toBe(true)
 
 const actualEventPayload = event[0]
-const expectedEventPayload = {'foo': 'foo'}
+const expectedEventPayload = { foo: 'foo' }
 expect(actualEventPayload).toEqual(expectedEventPayload)
 ```
 
@@ -283,7 +281,7 @@ test.each`
   ${1} | ${1} | ${2}
   ${1} | ${2} | ${3}
   ${2} | ${1} | ${3}
-`('returns $expected when $a is added $b', ({a, b, expected}) => {
+`('returns $expected when $a is added $b', ({ a, b, expected }) => {
   expect(a + b).toBe(expected);
 });
 ```
@@ -296,4 +294,67 @@ test.each([
 ])('.add(%i, %i)', (a, b, expected) => {
   expect(a + b).toBe(expected);
 });
+```
+
+## Master Template
+
+```js
+import VTooltip from 'v-tooltip'
+import Vuetify from 'vuetify'
+import Vuex from 'vuex'
+import { createLocalVue, mount } from '@vue/test-utils'
+
+/*************/
+/* VUE SETUP */
+/*************/
+
+const localVue = createLocalVue()
+localVue.use(Vuetify)
+localVue.use(Vuex)
+localVue.use(VTooltip)
+
+/***************/
+/* TEST VALUES */
+/***************/
+
+/*********/
+/* MOCKS */
+/*********/
+
+/************/
+/* WRAPPERS */
+/************/
+
+async function createFoo() {
+  return await mount(
+    Foo,
+    {
+      localVue,
+      propsData: {
+        bar: 'bar',
+      },
+      data: () => ({
+        baz: 'baz',
+      }),
+      stubs: { fa: true },
+    },
+  )
+}
+
+/*********/
+/* TESTS */
+/*********/
+
+describe('Test group 1', () => {
+  test('Test 1', async () => {
+    // Arrange
+    const wrapper = await createFoo()
+    
+    // Pre-Assert
+
+    // Act
+
+    // Assert
+  })
+})
 ```
