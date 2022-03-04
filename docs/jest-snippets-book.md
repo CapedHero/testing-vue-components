@@ -303,6 +303,7 @@ import VTooltip from 'v-tooltip'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import { createLocalVue, mount } from '@vue/test-utils'
+import FooComponent from "~/components/FooComponent"
 
 /*************/
 /* VUE SETUP */
@@ -325,9 +326,9 @@ localVue.use(VTooltip)
 /* WRAPPERS */
 /************/
 
-async function createFoo() {
-  return await mount(
-    Foo,
+function createFooComponent() {
+  return mount(
+    FooComponent,
     {
       localVue,
       propsData: {
@@ -345,16 +346,17 @@ async function createFoo() {
 /* TESTS */
 /*********/
 
-describe('Test group 1', () => {
-  test('Test 1', async () => {
+describe('Context/Page: Component <FooComponent>', () => {
+  test('Basic test case', async () => {
     // Arrange
-    const wrapper = await createFoo()
-    
+    const wrapper = await createFooComponent()
+
     // Pre-Assert
 
     // Act
 
     // Assert
+    console.log(wrapper.html())
   })
 })
 ```
