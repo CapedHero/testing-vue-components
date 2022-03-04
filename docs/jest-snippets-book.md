@@ -180,6 +180,7 @@ async function createComponentFoo() {
     {
       localVue,
       mocks: { $router: testRouter },
+      store,
     },
   )
 
